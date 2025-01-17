@@ -32,7 +32,6 @@ Wednesday,ICS 423,,ICS 423
 Thursday,,ICS 423,ICS 423
 Friday,,IOE 421,ICS 422
 
-
 ```
 
 ## 4. Run the program
