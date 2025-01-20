@@ -84,6 +84,17 @@ def join_class(driver, course_id):
     )
     listen_only_button.click()
 
+def check_logged_in(driver):
+    """Check if the user is logged in to the LMS."""
+    try:
+        driver.get("https://lms.iiitkottayam.ac.in/my/")
+        WebDriverWait(driver, 10).until(
+            EC.url_contains("https://lms.iiitkottayam.ac.in/my/")
+        )
+        return True
+    except:
+        return False
+
 def main():
     timetable,hours = load_timetable()
     driver = webdriver.Chrome()  # Replace with your preferred WebDriver
@@ -92,15 +103,33 @@ def main():
             current_class = get_current_class(timetable,hours)
             
             if current_class:
-                current_class = course_mapping[current_class]
-                print(f"Current class: {current_class}")
-                login_to_lms(driver)
-                join_class(driver, current_class)
+                if current_class not in course_mapping:
+                    print(f"Class {current_class} not found in course mapping.")
+                    time.sleep(60)
+                    continue
+                while True:
+                    try:
+                        current_class = course_mapping[current_class]
+                        print(f"Current class: {current_class}")
+                        if not check_logged_in(driver):
+                            login_to_lms(driver)
+                        join_class(driver, current_class)
+                        break
+                    except Exception as e:
+                        print(f"Error joining class: {e}")
+                        time.sleep(60)
+
             else:
                 print("No class at this time.")
 
-            # Wait for the next hour
-            time.sleep(3600)
+            # Check current time. If minutes is 0, sleep for an hour else sleep for (60-minutes)*60 seconds
+            now = datetime.datetime.now()
+            minutes = now.minute
+            print(f"Waiting for {60-minutes} minutes")  
+            if minutes == 0:
+                time.sleep(3600)
+            else:
+                time.sleep((60-minutes)*60)
     finally:
         driver.quit()
 
