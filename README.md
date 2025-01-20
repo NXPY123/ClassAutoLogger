@@ -39,15 +39,14 @@ Friday,,IOE 421,ICS 422
 export LMS_USERNAME="your_username"
 export LMS_PASSWORD="your_password"
 
-or set the environment variables in the .env file and run the following command:
-source .env
+or set the environment variables in the .env file and proceed to the next step
 
 or set the environment variables inside class_auto_login.py file:
 os.environ['LMS_USERNAME'] = 'your_username'
 os.environ['LMS_PASSWORD'] = 'your_password'
 ```
 
-## 4. Run the program
+## 5. Run the program
 ```bash
 python class_auto_login.py
 ```
