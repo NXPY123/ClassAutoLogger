@@ -73,15 +73,21 @@ def login_to_lms(driver):
     driver.find_element(By.ID, "loginbtn").click()
 
 def join_class(driver, course_id):
-    """Join the class for the given course ID."""
+    """Join the class for the given course ID in a new tab."""
+    # Open a new tab
+    driver.execute_script("window.open('');")
+    # Switch to the new tab
+    driver.switch_to.window(driver.window_handles[-1])
+    # Navigate to the course link
     driver.get(f"https://lms.iiitkottayam.ac.in/mod/bigbluebuttonbn/view.php?id={course_id}")
+
     # Click on 'Join session' button
     join_button = WebDriverWait(driver, 10).until(
         EC.element_to_be_clickable((By.ID, "join_button_input"))
     )
     join_button.click()
 
-    # Switch to the new tab and click 'Listen only'
+    # Switch to the newly opened tab for the session
     driver.switch_to.window(driver.window_handles[-1])
     listen_only_button = WebDriverWait(driver, 10).until(
         EC.element_to_be_clickable((By.CSS_SELECTOR, "button[data-test='listenOnlyBtn']"))
@@ -89,14 +95,22 @@ def join_class(driver, course_id):
     listen_only_button.click()
 
 def check_logged_in(driver):
-    """Check if the user is logged in to the LMS."""
+    """Check if the user is logged in to the LMS in a separate tab."""
     try:
+        # Open a new tab to check login status
+        driver.execute_script("window.open('');")
+        driver.switch_to.window(driver.window_handles[-1])
         driver.get("https://lms.iiitkottayam.ac.in/my/")
         WebDriverWait(driver, 10).until(
             EC.url_contains("https://lms.iiitkottayam.ac.in/my/")
         )
+        # Close the check tab and return to the main tab
+        driver.close()
+        driver.switch_to.window(driver.window_handles[0])
         return True
     except:
+        driver.close()
+        driver.switch_to.window(driver.window_handles[0])
         return False
 
 def main():
