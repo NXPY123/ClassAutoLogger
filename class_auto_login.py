@@ -101,7 +101,7 @@ def check_logged_in(driver):
         driver.execute_script("window.open('');")
         driver.switch_to.window(driver.window_handles[-1])
         driver.get("https://lms.iiitkottayam.ac.in/my/")
-        WebDriverWait(driver, 10).until(
+        WebDriverWait(driver, 5).until(
             EC.url_contains("https://lms.iiitkottayam.ac.in/my/")
         )
         # Close the check tab and return to the main tab
@@ -115,7 +115,7 @@ def check_logged_in(driver):
 
 def main():
     timetable,hours = load_timetable()
-    driver = webdriver.Chrome()  # Replace with your preferred WebDriver
+    #driver = webdriver.Chrome()  # Replace with your preferred WebDriver
     try:
         while True:
             current_class = get_current_class(timetable,hours)
@@ -129,6 +129,7 @@ def main():
                     try:
                         current_class = course_mapping[current_class]
                         print(f"Current class: {current_class}")
+                        driver = webdriver.Chrome() # Open a new browser window for each class
                         if not check_logged_in(driver):
                             login_to_lms(driver)
                         join_class(driver, current_class)
