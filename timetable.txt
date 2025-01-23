@@ -2,5 +2,5 @@ Day,11,12,13
 Monday,,ICS 423,IOE 421
 Tuesday,ICS 422,IOE 421,ICS 422
 Wednesday,ICS 423,,ICS 423
-Thursday,,ICS 423,ICS 423
+Thursday,ICS 423,ICS 423,
 Friday,,IOE 421,ICS 422
